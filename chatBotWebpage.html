@@ -101,18 +101,20 @@
             }
         });
 
-        function fetchBotResponse(userMessage) {
-            fetch("http://your-server-ip:5000/chat", { // Change this URL when deployed
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ question: userMessage })
-            })
-            .then(response => response.json())
-            .then(data => {
-                appendMessage("Bot", data.response);
-            })
-            .catch(error => appendMessage("Bot", "Error fetching response."));
-        }
+       function fetchBotResponse(userMessage) {
+    fetch("https://my-chatbot.onrender.com/chat", {  // Use Render URL
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: userMessage })
+    })
+    .then(response => response.json())
+    .then(data => {
+        appendMessage("Bot", data.response);
+    })
+    .catch(error => appendMessage("Bot", "Error fetching response."));
+}
+
+
         
     </script>
 </body>
