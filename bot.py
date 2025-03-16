@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify
 import requests
 from flask_cors import CORS
@@ -5,7 +6,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)  # Enable CORS to allow requests from the frontend
 
-TOGETHER_AI_API_KEY = "b003e3943f0d2e4dbcc7a1c50b6525491d467b2f175651e454718cd7b1804e14"
+TOGETHER_AI_API_KEY = os.getenv("TOGETHER_AI_API_KEY")
 
 def ask_gpt(question: str) -> str:
     url = "https://api.together.xyz/v1/completions"
