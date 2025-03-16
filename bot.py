@@ -1,32 +1,18 @@
+from flask import Flask, request, jsonify, send_from_directory
 import os
-from flask import Flask, request, jsonify
 import requests
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
-# Get the API key from environment variables
 TOGETHER_AI_API_KEY = os.getenv("TOGETHER_AI_API_KEY")
 
-# Root Route - Health Check
-@app.route("/", methods=["GET"])
-def home():
-    return jsonify({"message": "Chatbot API is running!"})
+# Serve the HTML file at the root URL
+@app.route("/")
+def index():
+    return send_from_directory(".", "chatBotWebpage.html")
 
-# Route to interact with the AI chatbot
-@app.route("/chat", methods=["POST"])
-def chat():
-    data = request.json
-    user_message = data.get("question", "")
-
-    if not user_message:
-        return jsonify({"response": "Please provide a valid question."})
-
-    bot_response = ask_gpt(user_message)
-    return jsonify({"response": bot_response})
-
-# Function to send requests to Together.AI API
 def ask_gpt(question: str) -> str:
     url = "https://api.together.xyz/v1/completions"
     headers = {
@@ -39,13 +25,24 @@ def ask_gpt(question: str) -> str:
         "temperature": 0.7,
         "max_tokens": 100
     }
-
+    
     response = requests.post(url, json=data, headers=headers)
 
     if response.status_code == 200:
         return response.json().get("choices", [{}])[0].get("text", "").strip()
     else:
         return f"Error: {response.status_code}, {response.text}"
+
+@app.route("/chat", methods=["POST"])
+def chat():
+    data = request.json
+    user_message = data.get("question", "")
+    
+    if not user_message:
+        return jsonify({"response": "Please provide a valid question."})
+
+    bot_response = ask_gpt(user_message)
+    return jsonify({"response": bot_response})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
