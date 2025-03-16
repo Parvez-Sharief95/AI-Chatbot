@@ -101,8 +101,8 @@
             }
         });
 
-       function fetchBotResponse(userMessage) {
-    fetch("https://ai-chatbot-o0ny.onrender.com", {  // Use Render URL
+      function fetchBotResponse(userMessage) {
+    fetch("https://ai-chatbot-o0ny.onrender.com/chat", { // Use the Render URL here
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question: userMessage })
@@ -112,7 +112,7 @@
         appendMessage("Bot", data.response);
     })
     .catch(error => appendMessage("Bot", "Error fetching response."));
-}
+      }
 
 
         
