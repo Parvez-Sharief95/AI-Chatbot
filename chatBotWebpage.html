@@ -31,19 +31,22 @@
             border-radius: 5px;
             background: #f9f9f9;
         }
+        .input-container {
+            display: flex;
+            margin-top: 10px;
+        }
         #user-input {
-            width: calc(100% - 50px);
+            flex: 1;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            margin-top: 10px;
         }
         #send-btn {
-            width: 40px;
-            height: 40px;
+            margin-left: 10px;
+            padding: 10px 15px;
             background: #667eea;
             border: none;
-            border-radius: 50%;
+            border-radius: 20px;
             color: white;
             cursor: pointer;
             transition: 0.3s;
@@ -68,10 +71,12 @@
 </head>
 <body>
     <div class="chat-container">
-        <h2>AI Chatbot</h2>
+        <h2>CHARI AI</h2>
         <div id="chat-box"></div>
-        <input type="text" id="user-input" placeholder="Type a message...">
-        <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+        <div class="input-container">
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button id="send-btn">SEND</button>
+        </div>
     </div>
 
     <script>
@@ -92,30 +97,35 @@
             alert("Copied to clipboard!");
         }
 
-        sendBtn.addEventListener("click", () => {
+        function sendMessage() {
             const message = userInput.value.trim();
             if (message) {
                 appendMessage("You", message);
                 userInput.value = "";
                 fetchBotResponse(message);
             }
+        }
+
+        sendBtn.addEventListener("click", sendMessage);
+
+        userInput.addEventListener("keypress", (event) => {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
         });
 
-      function fetchBotResponse(userMessage) {
-    fetch("https://ai-chatbot-o0ny.onrender.com/chat", { // Use the Render URL here
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question: userMessage })
-    })
-    .then(response => response.json())
-    .then(data => {
-        appendMessage("Bot", data.response);
-    })
-    .catch(error => appendMessage("Bot", "Error fetching response."));
-      }
-
-
-        
+        function fetchBotResponse(userMessage) {
+            fetch("http://your-server-ip:5000/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question: userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                appendMessage("Bot", data.response);
+            })
+            .catch(error => appendMessage("Bot", "Error fetching response."));
+        }
     </script>
 </body>
 </html>
