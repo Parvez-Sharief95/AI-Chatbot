@@ -23,7 +23,7 @@ def ask_gpt(question: str) -> str:
         "model": "meta-llama/Llama-3.3-70B-Instruct-Turbo-Free",
         "prompt": f"Question: {question}\nAnswer:",
         "temperature": 0.7,
-        "max_tokens": 100
+        "max_tokens": 500
     }
     
     response = requests.post(url, json=data, headers=headers)
